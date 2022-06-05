@@ -9,11 +9,16 @@ width: 100px;
 height: 100px;
 `
 
+const SubBox = styled(Box)`
+  width:150px;
+`
+
 function App() {
   return (
     <Father>
       <Box bgColor="teal" />
       <Box bgColor="tomato" />
+      <SubBox bgColor="blue" />
     </Father>
   );
 }
