@@ -1,59 +1,69 @@
-import styled from "styled-components"
+import styled, {keyframes} from "styled-components"
 
-const Father = styled.div`
-  display:flex;
+const Wrapper = styled.div`
+display: flex;
 `
 
-// props
+const rotateanimation = keyframes`
+  0% {
+    transform:rotate(0deg);
+    border-radius: 0px;
+  }
+  50% {
+    border-radius: 100px;
+  }
+  100% {
+    transform:rotate(360deg);
+    border-radius: 0px;
+  }
+`
+
+const Emoji = styled.span`
+    font-size: 36px;
+`
+
 const Box = styled.div`
-background-color: ${(props) => props.bgColor};
-width: 100px;
-height: 100px;
-`
-
-// 상속
-const SubBox = styled(Box)`
-  width:150px;
-`
-
-const Circle = styled(Box)`
-border-radius: 50px;
-`
-
-// 스타일을 활용하고 싶다
-//  href 같은것을 쓰고싶다
-const Btn = styled.button`
-  color: white;
-  background-color:tomato;
-  border: 0;
-  border-radius: 15px;
-`
-
-// 
-const Input = styled.input.attrs({required: true, minLength:10, placeholder:"text"})`
+  height: 200px;
+  width: 200px;
   background-color: tomato;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  animation: ${rotateanimation} 1s linear infinite;
+  ${Emoji} {
+      &:hover {
+      font-size: 50px;
+    }
+  }
+  /* & span {
+    font-size: 36px;
+    color: #fff;
+  
+    &:hover {
+      font-size: 50px;
+    }
+
+     
+  } */
+    
+  span:hover {
+    color: red;
+  }
+
 `
+
+// & 자기 자신을 지목 
+// ${} 입력하면 타겟팅 가능, 자식 까지 분류가능하다
+
+// 애니메이션을 적용하려면 keyframes import 해주자
 
 function App() {
   return (
-    <>
-    <Father>
-      <Box bgColor="teal" />
-      <Box bgColor="tomato" />
-      <Circle bgColor="tomato" />
-      <SubBox bgColor="blue" />
-
-    </Father>
-    {/* as 라고하면 a 태그로 쓰고싶다 같은 속성이나 태그 자체를 바꾸고싶을때*/}
-        <Btn >Log in</Btn>
-        <Btn as="a" href="/">Log in</Btn>
-        <Input  />
-        <Input  />
-        <Input  />
-        <Input  />
-        <Input  />
-        <Input  />
-    </>
+    <Wrapper>
+      <Box>
+        <Emoji>해피</Emoji>
+      </Box>
+    </Wrapper>
   );
 }
 
