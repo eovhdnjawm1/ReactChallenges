@@ -2,6 +2,15 @@ import styled, {keyframes} from "styled-components"
 
 const Wrapper = styled.div`
 display: flex;
+height: 100vh;
+width: 100vw;
+justify-content:center;
+align-items: center;
+background-color:${props => props.theme.backgroundColor};
+`
+
+const Title = styled.h1`
+color: ${props => props.theme.textColor};
 `
 
 const rotateanimation = keyframes`
@@ -29,7 +38,7 @@ const Box = styled.div`
   display:flex;
   justify-content: center;
   align-items: center;
-  animation: ${rotateanimation} 1s linear infinite;
+  /* animation: ${rotateanimation} 1s linear infinite; */
   ${Emoji} {
       &:hover {
       font-size: 50px;
@@ -45,10 +54,7 @@ const Box = styled.div`
 
      
   } */
-    
-  span:hover {
-    color: red;
-  }
+  
 
 `
 
@@ -60,9 +66,7 @@ const Box = styled.div`
 function App() {
   return (
     <Wrapper>
-      <Box>
-        <Emoji>해피</Emoji>
-      </Box>
+      <Title>Hello</Title>
     </Wrapper>
   );
 }
