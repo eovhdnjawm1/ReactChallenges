@@ -1,4 +1,4 @@
-import { Link, Switch, Route, useLocation, useParams, useRouteMatch } from 'react-router-dom'
+import { Link, Switch, Route, useLocation, useParams, useRouteMatch, useHistory } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components';
 import { useState, useEffect } from 'react';
 import Chart from "./Chart"
@@ -95,6 +95,13 @@ const Tab = styled.span <  { isActive: boolean }> `
   }
 `;
 
+const BackButton = styled.button`
+  border: none;
+  border-radius: 5px;
+  cursor:pointer;
+  background-color: ${(props) => props.theme.cardColor};
+  padding: 10px;
+`;
 
 
 interface RouteState {
@@ -174,8 +181,11 @@ function Coin() {
 		refetchInterval: 5000,
 	});
 
+	const history = useHistory();
+
 	const loading = infoLoading || tickersLoading;
 	return <Container>
+		<BackButton onClick={() => history.push("/")}>🏠</BackButton>
 		<Helmet>
 			<title>{state?.name ? state.name : loading ? "Loading.." : infoData?.name}</title>
 		</Helmet>
