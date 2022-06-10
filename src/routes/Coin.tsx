@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { useState, useEffect } from 'react';
 import Chart from "./Chart"
 import Price from "./Price"
+import { useQuery } from 'react-query';
 
 
 interface RouteParms {
@@ -192,6 +193,8 @@ interface IPriceData {
 		}
 	};
 }
+
+
 
 function Coin() {
 	const { coinId } = useParams<RouteParms>();

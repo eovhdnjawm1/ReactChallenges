@@ -1,6 +1,9 @@
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { fetchCoins } from './../api';
+import BounceBall from '../BounceBall'
 
 
 
@@ -48,8 +51,7 @@ const Coin = styled.li`
   }
 `
 
-
-interface CoinInterface {
+interface ICoin {
 	id: string,
 	name: string,
 	symbol: string,
@@ -67,48 +69,6 @@ const Loader = styled.div`
 	height: 100%;
 `
 
-const Bounce = keyframes`
-	from {
-		transform: scaleX(1.25);
-	}
-
-	to {
-		transform: translateY(-50px) scaleX(1);
-	}
-`
-
-const BounceLoading = styled.div`
-	width: 120px;
-	height: 75px;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
-	justify-content: space-between;
-`
-
-const Ball = styled.div`
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	background-color: #fff;
-	animation: ${Bounce} .2s alternate infinite;
-
-&:nth-child(2) {
-	animation-delay: .2s;
-}
-
-&:nth-child(3) {
-	animation-delay: .4s;
-}
-`
-
-const BallText = styled.span`
-	font-size: 22px;
-	text-transform: uppercase;
-	color: #fff;
-	margin-top: 25px;
-`
-
 const Img = styled.img`
 	width: 35px;
 	height: 35px;
@@ -116,37 +76,20 @@ const Img = styled.img`
 `
 
 function Coins() {
+	const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins)
 
-	const [coins, setCoins] = useState<CoinInterface[]>([])
-	const url = "https://api.coinpaprika.com/v1/coins";
-	const [loading, setLoading] = useState(true);
-
-
-	useEffect(() => {
-		(async () => {
-			const response = await fetch(url)
-			const json = await response.json();
-			setCoins(json.slice(0, 100));
-			setLoading(false);
-		})();
-	}, []);
 	return (
 
 		<Container>
 			<Header>
 				<Title> 코인</Title>
 			</Header>
-			{loading ?
+			{isLoading ?
 				<Loader>
-					<BounceLoading>
-						<Ball></Ball>
-						<Ball></Ball>
-						<Ball></Ball>
-						<BallText>Loading...</BallText>
-					</BounceLoading>
+					<BounceBall />
 				</Loader>
 				: (<CoinsList>
-					{coins.map((coin) => (
+					{data?.slice(0, 100).map((coin) => (
 						<Coin key={coin.id}>
 							<Link to={{
 								pathname: `/${coin.id}`,
