@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import Chart from "./Chart"
 import Price from "./Price"
 import { useQuery } from 'react-query';
-
-
+import { fetchCoinInfo, fetchCoinTickers } from './../api';
+import BounceBall from '../BounceBall'
 interface RouteParms {
 	coinId: string
 }
@@ -39,48 +39,6 @@ const Loader = styled.div`
 	height: 100%;
 `
 
-const Bounce = keyframes`
-	from {
-		transform: scaleX(1.25);
-	}
-
-	to {
-		transform: translateY(-50px) scaleX(1);
-	}
-`
-
-const BounceLoading = styled.div`
-	width: 120px;
-	height: 75px;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
-	justify-content: space-between;
-`
-
-const Ball = styled.div`
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	background-color: #fff;
-	animation: ${Bounce} .2s alternate infinite;
-
-&:nth-child(2) {
-	animation-delay: .2s;
-}
-
-&:nth-child(3) {
-	animation-delay: .4s;
-}
-`
-
-const BallText = styled.span`
-	font-size: 22px;
-	text-transform: lowercase;
-	color: #fff;
-	margin-top: 25px;
-`
-
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
@@ -111,7 +69,6 @@ const Tabs = styled.div`
   gap: 10px;
 `;
 
-//<{ isActive: boolean }>
 const Tab = styled.span <  { isActive: boolean }> `
   text-align: center;
   text-transform: uppercase;
@@ -160,7 +117,7 @@ interface IInfoData {
 	first_data_at: string;
 	last_data_at: string;
 }
-interface IPriceData {
+interface ITickersData {
 	id: string;
 	name: string;
 	symbol: string;
@@ -198,67 +155,46 @@ interface IPriceData {
 
 function Coin() {
 	const { coinId } = useParams<RouteParms>();
-	const [loading, setLoading] = useState(true);
 	const { state } = useLocation<RouteState>();
-
-	const coinUrl = "https://api.coinpaprika.com/v1/coins/"
-	const tickersUrl = "https://api.coinpaprika.com/v1/tickers/"
-
-	const [info, setInfo] = useState<IInfoData>();
-	const [priceInfo, setPriceInfo] = useState<IPriceData>();
 	const priceMatch = useRouteMatch("/:coinId/price")
 	const chartMatch = useRouteMatch("/:coinId/chart")
+	const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>(["info", coinId], () => fetchCoinInfo(coinId));
+	const { isLoading: tickersLoading, data: tickersData } = useQuery<ITickersData>(["tickers", coinId], () => fetchCoinTickers(coinId));
 
-
-	useEffect(() => {
-		(async () => {
-			const infoData = await (await fetch(coinUrl + coinId)).json();
-			const priceData = await (await fetch(tickersUrl + coinId)).json();
-			setInfo(infoData);
-			setPriceInfo(priceData);
-			setLoading(false);
-		})();
-
-	}, [coinId])
-
+	const loading = infoLoading || tickersLoading;
 	return <Container>
 		<Header>
-			<Title> {state?.name ? state.name : loading ? "Loading.." : info?.name} </Title>
+			<Title> {state?.name ? state.name : loading ? "Loading.." : infoData?.name} </Title>
 		</Header>
 		{loading ?
 			<Loader>
-				<BounceLoading>
-					<Ball></Ball>
-					<Ball></Ball>
-					<Ball></Ball>
-					<BallText>Loading...</BallText>
-				</BounceLoading>
+				<BounceBall />
 			</Loader>
 			: (
 				<>
 					<Overview>
 						<OverviewItem>
 							<span>Rank:</span>
-							<span>{info?.rank}</span>
+							<span>{infoData?.rank}</span>
 						</OverviewItem>
 						<OverviewItem>
 							<span>Symbol:</span>
-							<span>${info?.symbol}</span>
+							<span>${infoData?.symbol}</span>
 						</OverviewItem>
 						<OverviewItem>
 							<span>Open Source:</span>
-							<span>{info?.open_source ? "Yes" : "No"}</span>
+							<span>{infoData?.open_source ? "Yes" : "No"}</span>
 						</OverviewItem>
 					</Overview>
-					<Description>{info?.description}</Description>
+					<Description>{infoData?.description}</Description>
 					<Overview>
 						<OverviewItem>
 							<span>Total Suply:</span>
-							<span>{priceInfo?.total_supply}</span>
+							<span>{tickersData?.total_supply}</span>
 						</OverviewItem>
 						<OverviewItem>
 							<span>Max Supply:</span>
-							<span>{priceInfo?.max_supply}</span>
+							<span>{tickersData?.max_supply}</span>
 						</OverviewItem>
 					</Overview>
 					<Tabs>
