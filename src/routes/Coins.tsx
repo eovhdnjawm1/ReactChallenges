@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 
 
-const Title = styled.h1`
-	color: ${props => props.theme.accentColor};
-	font-size: 48px;
-`
 
 const Container = styled.div`
 	padding: 0px 20px;
@@ -14,8 +10,12 @@ const Container = styled.div`
 	margin: 0 auto;
 	width: 100vw;
 	height: 100vh;
-
-`
+	
+	`
+const Title = styled.h1`
+		color: ${props => props.theme.accentColor};
+		font-size: 48px;
+	`
 
 const Header = styled.header`
 	height: 10vh;
@@ -37,7 +37,9 @@ const Coin = styled.li`
 	a {
     padding: 20px;
     transition: color 0.2s ease-in;
-    display: block;
+    display: flex;
+	align-items: center;
+
   }
   &:hover {
     a {
@@ -107,6 +109,12 @@ const BallText = styled.span`
 	margin-top: 25px;
 `
 
+const Img = styled.img`
+	width: 35px;
+	height: 35px;
+	margin-right: 15px;
+`
+
 function Coins() {
 
 	const [coins, setCoins] = useState<CoinInterface[]>([])
@@ -118,12 +126,10 @@ function Coins() {
 		(async () => {
 			const response = await fetch(url)
 			const json = await response.json();
-			console.log(json);
 			setCoins(json.slice(0, 100));
 			setLoading(false);
 		})();
 	}, []);
-	console.log(coins);
 	return (
 
 		<Container>
@@ -142,9 +148,14 @@ function Coins() {
 				: (<CoinsList>
 					{coins.map((coin) => (
 						<Coin key={coin.id}>
-							<Link to={`/${coin.id}`}>
-								<img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
+							<Link to={{
+								pathname: `/${coin.id}`,
+								state: { name: coin.name },
+
+							}}>
+								<Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
 								{coin.name} &rarr;</Link>
+
 						</Coin>
 					))}
 				</CoinsList>)}
