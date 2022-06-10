@@ -1,37 +1,62 @@
-import React, { useState } from 'react';
-import styled from 'styled-components'
+import { createGlobalStyle } from 'styled-components';
+import Router from "./Router"
 
-const Container = styled.div`
-  background-color: ${props => props.theme.bgColor};
-`
-const H1 = styled.h1`
-  color:${props => props.theme.textColor};
+const GlobalStyle = createGlobalStyle`
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, menu, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+main, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, menu, nav, section {
+  display: block;
+}
+/* HTML5 hidden-attribute fix for newer browsers */
+*[hidden] {
+    display: none;
+}
+body {
+  line-height: 1;
+}
+menu, ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 `
 
 function App() {
-  const [username, setUsername] = useState("")
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    // 기본 event의 타입은 any... js가 쓰는것
-    // React 는 InputElement에서 실행될거라고 설정
-    event.preventDefault();
-    const { currentTarget: { value }, } = event;
-    setUsername(value);
-  };
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // 해당 이벤트가 어떤 태그에 이용될 것 인지에대해서도 보호를 받을 수 있음
-
-    event.preventDefault();
-    // 해당 코드는 form에서만 쓸 수 잇으므로 위에서 보호받지않고 해당 코드를 다른 태그에서
-    // 사용하게된다면.. 에러가 안뜬다.. 그냥 처음부터 찾아야한다.
-
-    console.log("hello", username);
-  }
-
   return (
-    <Container>
-      <H1>protected</H1>
-    </Container>
+    <>
+      <GlobalStyle />
+      <Router />
+    </>
   );
 }
 
