@@ -26,6 +26,15 @@ const Title = styled.h1`
 		font-size: 48px;
 	`
 
+const Button = styled.div`
+	font-size: 1.5em;
+  border: none;
+  border-radius: 1em;
+  background-color: ${(props) => props.theme.cardColor};
+  cursor: pointer;
+  padding: 5px 10px;
+  `
+
 const Header = styled.header`
 	height: 10vh;
 	display:flex;
@@ -44,7 +53,7 @@ const Loader = styled.div`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.cardColor};
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -76,7 +85,7 @@ const Tab = styled.span <  { isActive: boolean }> `
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.cardColor};
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>

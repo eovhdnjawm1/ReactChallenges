@@ -27,13 +27,33 @@ const Header = styled.header`
 	justify-content: center;
 	align-items: center;
 `
-
 const CoinsList = styled.ul`
-
 `
-
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 1.4em;
+  border: none;
+  border-radius: 1em;
+  background-color: ${(props) => props.theme.cardColor};
+`;
+const Button = styled.div`
+  position: absolute;
+  border: none;
+  border-radius: 50%;
+  width: 1.5em;
+  height: 1.5em;
+  background-color: ${(props) => props.theme.accentColor};
+  margin: 0;
+  z-index: 1;
+  transition: transform 200ms linear;
+  left: 0em;
+`;
 const Coin = styled.li`
-	background-color: white;
+	background-color: ${(props) => props.theme.cardColor};
 	color: ${props => props.theme.bgColor};
 	margin-bottom: 10px;
 	border-radius: 15px;

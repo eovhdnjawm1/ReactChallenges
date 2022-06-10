@@ -2,6 +2,9 @@ import { createGlobalStyle } from 'styled-components';
 import Router from "./Router"
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { HelmetProvider } from "react-helmet-async";
+import { theme, whitetheme } from './theme';
+import { ThemeProvider } from 'styled-components';
+import { useState } from 'react';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -65,19 +68,39 @@ body {
 
 a {
   text-decoration: none;
-  color: inherit;
+  color: ${props => props.theme.textColor};
+}
+
+.themeButton {
+	display: inline-block;
+	width: 90px;
+	height: 35px;
+  color: ${props => props.theme.textColor};
+	background-color: ${props => props.theme.bgColor};
+	border-radius: 30px;
+	position: relative;
+  border: 1px solid ${props => props.theme.accentColor};;
+  cursor: pointer;
+  margin: 15px; 
 }
 `
 
+
+
 function App() {
+  const [isTheme, setTheme] = useState(false);
+
   return (
     <>
-      <GlobalStyle />
-      <HelmetProvider>
-        <Router />
-      </HelmetProvider>
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ThemeProvider theme={isTheme ? theme : whitetheme}>
+        <button className='themeButton' onClick={() => setTheme(!isTheme)}> 테마변경</button>
+        <GlobalStyle />
+        <HelmetProvider>
 
+          <Router />
+        </HelmetProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   );
 }
