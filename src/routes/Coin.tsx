@@ -171,11 +171,10 @@ interface ITickersData {
 
 
 interface ICoinProps {
-	isTheme: boolean;
 }
 
 
-function Coin({ isTheme }: ICoinProps) {
+function Coin({ }: ICoinProps) {
 	const { coinId } = useParams<RouteParms>();
 	const { state } = useLocation<RouteState>();
 	const priceMatch = useRouteMatch("/:coinId/price")
@@ -247,7 +246,7 @@ function Coin({ isTheme }: ICoinProps) {
 							<Price coinId={coinId} />
 						</Route>
 						<Route path={`/:coinId/chart`}>
-							<Chart isTheme={isTheme} coinId={coinId} />
+							<Chart coinId={coinId} />
 						</Route>
 					</Switch>
 				</>

@@ -5,6 +5,8 @@ import { useQuery } from 'react-query';
 import { fetchCoins } from './../api';
 import BounceBall from '../BounceBall'
 import { Helmet } from 'react-helmet';
+import { useSetRecoilState } from 'recoil';
+import { isDarkAtom } from './../atoms';
 
 
 
@@ -97,10 +99,12 @@ const Img = styled.img`
 `
 
 interface ICoinsProps {
-	toggleDark: () => void;
 }
 
-function Coins({ toggleDark }: ICoinsProps) {
+function Coins({ }: ICoinsProps) {
+	const setDarkAtom = useSetRecoilState(isDarkAtom)
+	const toggleDarkAtom = () => setDarkAtom(prev => !prev)
+
 	const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins)
 
 	return (
@@ -112,7 +116,7 @@ function Coins({ toggleDark }: ICoinsProps) {
 			<Header>
 
 				<Title> 코인</Title>
-				<button onClick={toggleDark}>Toggle Dark Mode</button>
+				<button onClick={toggleDarkAtom}>Toggle Dark Mode</button>
 			</Header>
 			{isLoading ?
 				<Loader>

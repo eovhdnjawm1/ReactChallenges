@@ -5,9 +5,13 @@ import { HelmetProvider } from "react-helmet-async";
 import { lighttheme, darktheme } from './theme';
 import { ThemeProvider } from 'styled-components';
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from './atoms';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+
+
 font-family: 'Source Sans Pro', sans-serif;
 
 html, body, div, span, applet, object, iframe,
@@ -88,15 +92,14 @@ a {
 
 
 function App() {
-  const [isTheme, setTheme] = useState(false);
-  const toggleDark = () => setTheme((current) => !current)
+  const isDark = useRecoilValue(isDarkAtom)
   return (
     <>
-      <ThemeProvider theme={isTheme ? darktheme : lighttheme}>
+      <ThemeProvider theme={isDark ? darktheme : lighttheme}>
         <GlobalStyle />
         <HelmetProvider>
 
-          <Router isTheme={isTheme} toggleDark={toggleDark} />
+          <Router />
         </HelmetProvider>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
