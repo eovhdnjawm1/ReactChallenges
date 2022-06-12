@@ -23,5 +23,13 @@ export function fetchCoinHistory(coinId: string) {
 	).then((response) => response.json());
 }
 
+
+export function fetchCoinPrice(coinId: string) {
+	return fetch(`${BASE_URL}/coins/${coinId}/ohlcv/today`).then((response) =>
+		response.json()
+	);
+}
+
+
 // floor 는 내림 처리
 // ceil 는 올림 처리

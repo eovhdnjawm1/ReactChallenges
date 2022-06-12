@@ -2,7 +2,6 @@ import { useQuery } from 'react-query';
 import { fetchCoinHistory } from '../api';
 import ApexChart from "react-apexcharts"
 
-
 interface IHistorical {
 	time_open: string;
 	time_close: string;
@@ -24,63 +23,78 @@ function Chart({ coinId }: Chartprops) {
 		});
 	return (
 		<>
-			{isLoading ? "Loading chart..." : <ApexChart
-				type="line"
-				series={[
-					{
-						name: "closePrice",
-						data: data?.map(((price) => price.close)) ?? [],
-					},
-				]}
-				options={{
-					theme: {
-						mode: "dark",
-					},
-					chart: {
-						height: 300,
-						width: 500,
-						toolbar: {
-							show: false
+			{isLoading ? "Loading chart..." : (
+				<ApexChart
+					type="candlestick"
+					series={[
+						{
+							data: data?.map((price) => {
+								return {
+									x: price.time_open,
+									y: [price.open.toFixed(2),
+									price.high.toFixed(2),
+									price.low.toFixed(2),
+									price.close.toFixed(2)]
+								};
+							}),
 						},
-						background: "transparents",
-					},
-					grid: {
-						show: false,
-					},
-					stroke: {
-						curve: "smooth",
-						width: 5,
-					},
-					xaxis: {
-						labels: {
-							show: false,
-							datetimeFormatter: { month: "mmm 'yy" }
+					] as any}
+					options={{
+						colors: [
+							'#546E7A', '#E91E63',
+						],
+						theme: {
+							mode: "light",
 						},
-						axisTicks: {
-							show: false,
+						chart: {
+							height: 500,
+							width: 500,
+							toolbar: {
+								show: false,
+							},
+							background: "transparent",
 						},
-						axisBorder: {
-							show: false,
+						grid: {
+							show: true,
 						},
-						type: "datetime",
-						categories: data?.map((date) => date.time_close),
+						stroke: {
+							curve: "smooth",
+							width: 3,
+						},
+						xaxis: {
+							type: "datetime",
+							labels: {
+								show: true,
+								format: "M/dd",
+							},
+							axisTicks: {
+								show: false,
+							},
+							axisBorder: {
+								show: false,
+							},
+							tooltip: {
+								enabled: false,
+							},
+						},
+						yaxis: {
+							labels: {
+								show: true,
+							},
+						},
+						plotOptions: {
+							candlestick: {
+								colors: {
+									upward: "#FF6363",
+									downward: "#219F94",
+								},
+							},
+						},
 
-					},
-					yaxis: {
-						show: false,
-					},
-					fill: {
-						type: "gradient",
-						gradient: { gradientToColors: ["blue"], stops: [0, 100] },
-
-					},
-					colors: ["red"],
-					tooltip: {
-						y: {
-							formatter: (value) => `$ ${value.toFixed(2)}`
-						},
-					}
-				}} />}
+					}}
+				/>
+			)
+			}
 		</>
 	)
 }
