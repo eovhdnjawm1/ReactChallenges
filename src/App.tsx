@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 import Router from "./Router"
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { HelmetProvider } from "react-helmet-async";
-import { theme, whitetheme } from './theme';
+import { lighttheme, darktheme } from './theme';
 import { ThemeProvider } from 'styled-components';
 import { useState } from 'react';
 
@@ -89,15 +89,14 @@ a {
 
 function App() {
   const [isTheme, setTheme] = useState(false);
-
+  const toggleDark = () => setTheme((current) => !current)
   return (
     <>
-      <ThemeProvider theme={isTheme ? theme : whitetheme}>
-        <button className='themeButton' onClick={() => setTheme(!isTheme)}> 테마변경</button>
+      <ThemeProvider theme={isTheme ? darktheme : lighttheme}>
         <GlobalStyle />
         <HelmetProvider>
 
-          <Router />
+          <Router isTheme={isTheme} toggleDark={toggleDark} />
         </HelmetProvider>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
