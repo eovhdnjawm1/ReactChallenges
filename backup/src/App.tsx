@@ -1,16 +1,12 @@
-import React from 'react';
-import ReactDOM from "react-dom/client";
-import App from './App';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import styled from 'styled-components';
-import { RecoilRoot } from 'recoil';
-import { ThemeProvider } from 'styled-components';
-import { darktheme } from './theme';
 import { createGlobalStyle } from 'styled-components';
-
-const rootElement = document.getElementById('root');
-if (!rootElement) throw new Error('Failed to find the root element');
-const root = ReactDOM.createRoot(rootElement);
+import Router from "./Router"
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { HelmetProvider } from "react-helmet-async";
+import { lighttheme, darktheme } from './theme';
+import { ThemeProvider } from 'styled-components';
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from './atoms';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -94,13 +90,21 @@ a {
 `
 
 
-root.render(
-  <React.StrictMode>
-    <RecoilRoot>
-      <ThemeProvider theme={darktheme}>
+
+function App() {
+  const isDark = useRecoilValue(isDarkAtom)
+  return (
+    <>
+      <ThemeProvider theme={isDark ? darktheme : lighttheme}>
         <GlobalStyle />
-        <App />
+        <HelmetProvider>
+
+          <Router />
+        </HelmetProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
-    </RecoilRoot>
-  </React.StrictMode>
-);
+    </>
+  );
+}
+
+export default App;
